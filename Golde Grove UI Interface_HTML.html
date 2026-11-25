@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Golden Grove AI Finance – Enhanced</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ══════ SIDEBAR ══════ -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-name">🌿 Golden Grove Mart</div>
+      <div class="brand-sub">AI Finance System</div>
+      <div class="brand-ai">🤖 AI-Assisted · Demo Mode</div>
+    </div>
+    <nav id="sidebar-nav"></nav>
+    <div class="sidebar-user">
+      <div class="user-label">Switch User</div>
+      <div class="role-switcher">
+        <button class="role-btn active" data-user="aina">Aina</button>
+        <button class="role-btn" data-user="meiLing">Mei Ling</button>
+        <button class="role-btn" data-user="siti">Siti</button>
+        <button class="role-btn" data-user="hafiz">Hafiz</button>
+      </div>
+      <div class="current-user-info" id="sidebar-user-info">Aina · Finance Clerk</div>
+    </div>
+  </aside>
+
+  <!-- ══════ MAIN ══════ -->
+  <div id="main">
+
+    <!-- Top Header -->
+    <div id="topbar">
+      <div id="topbar-title" class="topbar-title">Executive Dashboard</div>
+      <div class="topbar-user">
+        <span class="demo-badge">⚠ Demo Data</span>
+        <div class="user-avatar" id="topbar-avatar">A</div>
+        <div>
+          <div id="topbar-user-name" style="font-weight:600;font-size:13px">Aina</div>
+          <div id="topbar-user-role" style="font-size:11px;color:var(--grey-400)">Finance Clerk</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div id="content">
+
+      <div class="page active" id="page-dashboard"></div>
+      <div class="page" id="page-invoice-mgmt"></div>
+      <div class="page" id="page-invoices"></div>
+      <div class="page" id="page-matching"></div>
+      <div class="page" id="page-risk"></div>
+      <div class="page" id="page-exceptions"></div>
+      <div class="page" id="page-approval"></div>
+      <div class="page" id="page-payments"></div>
+      <div class="page" id="page-suppliers"></div>
+      <div class="page" id="page-chatbot"></div>
+      <div class="page" id="page-xai"></div>
+      <div class="page" id="page-reports"></div>
+      <div class="page" id="page-audit"></div>
+      <div class="page" id="page-users"></div>
+      <div class="page" id="page-settings"></div>
+
+      <!-- ── New enhanced pages ── -->
+      <div class="page" id="page-aging"></div>
+      <div class="page" id="page-integration"></div>
+      <div class="page" id="page-outcomes"></div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ══════ MODAL ══════ -->
+<div class="modal-backdrop hidden" id="modal-backdrop" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Details</h2>
+      <span class="modal-close" onclick="closeModal()">✕</span>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ CHATBOT FAB ══════ -->
+<div id="chat-fab" onclick="toggleChat()" title="AI Finance Assistant">
+  🤖
+  <div class="chat-badge" id="chat-fab-badge">!</div>
+</div>
+
+<!-- ══════ CHATBOT WINDOW ══════ -->
+<div id="chat-window">
+  <div class="chat-header">
+    <div class="chat-avatar">🤖</div>
+    <div class="chat-title">
+      <strong>Golden Grove AI Assistant</strong>
+      <span>Invoice Intelligence · Demo Mode</span>
+    </div>
+    <span class="chat-close" onclick="toggleChat()">✕</span>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-suggested" id="chat-suggested"></div>
+  <div class="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Ask about invoices, risk, payments…"
+           onkeydown="if(event.key==='Enter')sendChatMessage()" />
+    <button class="chat-send" onclick="sendChatMessage()">➤</button>
+  </div>
+  <div class="chat-disclaimer" id="chat-disclaimer"></div>
+</div>
+
+<!-- ══════ TOAST ══════ -->
+<div id="toast-container"></div>
+
+<!-- ══════ SCRIPTS ══════ -->
+<script src="js/mock-data.js"></script>
+<script src="js/risk-engine.js"></script>
+<script src="js/agent-simulation.js"></script>
+<script src="js/chatbot.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/invoice.js"></script>
+<script src="js/matching.js"></script>
+<script src="js/xai.js"></script>
+<script src="js/enhancements.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+// ── Floating Chatbot ───────────────────────────────────────────
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chat-window').classList.toggle('open', chatOpen);
+  document.getElementById('chat-fab-badge').style.display = chatOpen ? 'none' : '';
+  if (chatOpen && document.getElementById('chat-messages').childElementCount === 0) {
+    appendChatMsg('bot', 'Hello! I\'m the Golden Grove AI Finance Assistant. Ask me about invoices, risk, duplicates, or payment performance.');
+    renderChatSuggestions();
+  }
+}
+
+function initChat() {
+  document.getElementById('chat-disclaimer').textContent = CHATBOT_LABEL;
+  renderChatSuggestions();
+}
+
+function renderChatSuggestions() {
+  const c = document.getElementById('chat-suggested');
+  if (!c) return;
+  c.innerHTML = SUGGESTED_QUESTIONS.slice(0,3).map(q =>
+    `<button class="sug-btn" onclick="askSuggested('${q.replace(/'/g, "\\'")}')">${q}</button>`
+  ).join('');
+}
+
+function askSuggested(q) {
+  document.getElementById('chat-input').value = q;
+  sendChatMessage();
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  appendChatMsg('user', msg);
+
+  // Typing indicator
+  const chatMsgs = document.getElementById('chat-messages');
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'msg bot';
+  typingDiv.innerHTML = '<div class="msg-bubble"><div class="chat-typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>';
+  chatMsgs.appendChild(typingDiv);
+  chatMsgs.scrollTop = chatMsgs.scrollHeight;
+
+  setTimeout(() => {
+    const resp = chatbotRespond(msg);
+    typingDiv.remove();
+    const div = document.createElement('div');
+    div.className = 'msg bot';
+    let actHtml = '';
+    if (resp.actions?.length) {
+      actHtml = '<div class="msg-actions">' + resp.actions.map(a => {
+        if (a.nav) return `<button class="msg-action-btn" onclick="navigate('${a.nav}');toggleChat();">${a.label}</button>`;
+        if (a.question) return `<button class="msg-action-btn" onclick="askSuggested('${a.question.replace(/'/g, "\\'")}')">${a.label}</button>`;
+        return '';
+      }).join('') + '</div>';
+    }
+    const time = new Date().toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});
+    div.innerHTML = `<div class="msg-bubble">${resp.text}</div>${actHtml}<div class="msg-time">${time}</div>`;
+    chatMsgs.appendChild(div);
+    chatMsgs.scrollTop = chatMsgs.scrollHeight;
+    chatHistory.push({ role: 'user', text: msg });
+    chatHistory.push({ role: 'bot', text: resp.text });
+  }, 850);
+}
+
+function appendChatMsg(role, text) {
+  const c = document.getElementById('chat-messages');
+  if (!c) return;
+  const time = new Date().toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `<div class="msg-bubble">${role === 'bot' ? text : text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div><div class="msg-time">${time}</div>`;
+  c.appendChild(div);
+  c.scrollTop = c.scrollHeight;
+}
+</script>
+
+</body>
+</html>
