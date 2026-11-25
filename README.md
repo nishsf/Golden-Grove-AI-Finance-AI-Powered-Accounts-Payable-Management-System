@@ -1,0 +1,2 @@
+# Golden-Grove-AI-Finance-AI-Powered-Accounts-Payable-Management-System
+Golden Grove AI Finance is a frontend-only prototype designed to improve supplier invoice processing and financial operations through AI-assisted automation, risk detection and explainable decision support.  The project explores how Agentic AI concepts, Explainable AI (XAI) and conversational AI can support Accounts Payable (AP) operations.
